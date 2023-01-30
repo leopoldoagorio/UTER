@@ -1,0 +1,8 @@
+La base de datos Ricaldoni_v1.sqlite (el formato SQLite 3 es libre y reconocido para almacenamiento y transferencia de datos) contiene dos tablas, a saber, Estaciones y Potencias, con información desde el año 2008 al 2021 inclusive.
+La tabla Estaciones contiene el nombre y las coordenadas geográficas de cada estación de transmisión. Debe tenerse en cuenta que:
+- No necesariamente hay datos para todas las estaciones en todo el período, por ejemplo porque en los primeros años la estación no existía.
+- La demanda vista desde las estaciones de transmisión excluyendo la microgeneración, esto es, es la demanda final menos lo que se genera a nivel de microgeneración. Ese error parece no ser significativo en los datos históricos. Además, incluye las pérdidas en la red de distribución.
+- Se agregó en esta tabla un objeto SUM que corresponde a la suma de la demanda en todas las estaciones de transmisión, por lo que dicha información es redundante.
+- La estación FIC es una estación ficticia que se creó temporalmente para solucionar problemas de medición en el circuito Bifurcación - Minas.
+La tabla Potencias contiene, para cada fecha y hora UTC-3 del período mencionado, el valor de la potencia media horaria en MW de la demanda vista desde cada estación de transmisión, incluyendo SUM que corresponde a la suma de la demanda vista desde todas las estaciones de transmisión en cada hora.
+La potencia media asignada a una hora corresponde a la potencia integrada en el intervalo que se inicia en esa hora, por ejemplo, la potencia integrada en el intervalo que va desde la hora 14:00 a la hora 15:00 se asigna en la tabla a la hora 14:00.
