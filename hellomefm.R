@@ -1,4 +1,7 @@
-library(MEFM)
+library(MEFM) # monash energy forecasting model
+
+library(ggplot2) # for plotting
+library(scales)
 
 formula.hh <- list()
 #p: log(y-o) = h(t) + f(T,t)+cjzj(t)+n(t)
@@ -39,3 +42,31 @@ demand <- simulate_demand(simdemand, afcast)
 # Illustrate the results
 plot(density(demand$annmax, bw="SJ"),
      main="Density of seasonal maximum demand", xlab="Demand")
+
+#Leo added: PoE for sim
+# generate datafrane with demand$annmax and linear rank
+
+ordmaxs <- demand$annmax[order(demand$annmax, decreasing = TRUE)]
+Rank <- 1:length(demand$annmax)
+DF <- data.frame(ordmaxs, Rank)
+DF$Prob <-  DF$Rank/(length(DF$Rank) + 1)
+
+# plot
+ggplot(data = DF, aes(x = Prob, y = ordmaxs)) +
+  geom_line() + 
+  scale_x_continuous(breaks = seq(0, 1, by = 0.20),
+                     labels = percent) +
+  scale_y_continuous()
+
+# eval PoE 20% and print it
+print(paste("PoE 20%:", quantile(demand$annmax, 0.8)))
+
+# another option to plot is use quantile function and get smoothed plot
+xp = (1:100)/100
+yp = quantile(demand$annmax, 1-xp)
+plot(xp, yp, type="l", xlab="Probability", ylab="Demand")
+
+#plot both plots with different colors and labels, with title PoE plot                                                                                                    
+plot(xp, yp, type="l", xlab="Probability", ylab="Demand", col="red", main="PoE plot")
+lines(DF$Prob, DF$ordmaxs, col="blue")
+legend("topright", legend=c("quantile", "rank"), col=c("red", "blue"), lty=1:1)
