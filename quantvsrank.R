@@ -1,3 +1,7 @@
+library(ggplot2)
+library(MEFM)
+library(scales)
+
 #define PoE function with quantile function given the time series
 PoEquant <- function(x) {
   xp = (1:100)/100
@@ -49,3 +53,18 @@ print("PoE at 0.95 for quantile method")
 PoEatp(PoEquant(vector_data), 0.95)
 print("PoE at 0.95 for empiric method")
 PoEatp(PoEemp(vector_data), 0.95)
+
+
+#now load the data from the file ./PDA/Ricaldoni_v1.sqlite
+library(RSQLite)
+con <- dbConnect(SQLite(), dbname = "./PDA/Ricaldoni_v1.sqlite")
+#print the tables
+dbListTables(con)
+#load the data from the table "POTENCIAS" where Id_estacion==65 (sum)
+sums <- dbGetQuery(con, "SELECT * FROM POTENCIAS WHERE Id_estacion==65")
+#close the connection
+dbDisconnect(con)
+
+#first install it with install.packages
+library(dplyr)
+install.packages("dplyr")
