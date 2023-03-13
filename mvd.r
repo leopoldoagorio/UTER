@@ -8,6 +8,7 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(MEFM)
+library(data.table)
 
 Sys.setlocale("LC_TIME", "C")
 
@@ -20,28 +21,6 @@ dbListTables(con)
 mvd_demands <- dbGetQuery(con, "SELECT * FROM POTENCIAS WHERE Id_estacion==65")
 #close the connection
 dbDisconnect(con)
-
-# load climate data
-all_temps <- read_csv("./dataset.csv")
-# sanity check
-#head(sumscsv) #idx longitud latitud año mes dia hora temperatura(°C)
-# print all possible values for the column "longitud"
-#unique(sumscsv$longitud)
-# print all possible values for the column "latitud"
-#unique(sumscsv$latitud)
-# Find the closest values to Montevideo
-closest_lat <- unique(all_temps$latitud)[which.min(abs(unique(all_temps$latitud) + 34.9))] # -35
-closest_long <- unique(all_temps$longitud)[which.min(abs(unique(all_temps$longitud) + 56.2))] # -56.25
-
-# Subset rows where latitud and longitud match the closest values to Montevideo
-mvd_temps <- all_temps[all_temps$latitud == closest_lat & all_temps$longitud == closest_long, ]
-# Rename the column to use an underscore instead of the degree symbol
-names(mvd_temps)[names(mvd_temps) == "temperatura(°C)"] <- "temperatura_C"
-
-# we have in the mvd_demands$FechaHum "2008-01-01 03:00:00" (char)
-# Load necessary packages
-library(lubridate)
-library(data.table)
 
 # Create a sample dataset with datetime column
 mvd_demands <- data.frame(FechaHum = c("2008-01-01 03:00:00", "2008-01-02 05:00:00", "2008-01-03 02:00:00"))
@@ -80,3 +59,12 @@ mvd_demands$fyear <- as.numeric(format(mvd_demands$datetime, "%Y"))#ifelse(month
 
 # Print the final dataframe
 mvd_demands
+
+############ NOW PROCESS CLIMATE DATA ############
+# load climate data
+temps00s <- read_csv("./dataset_2000a2010_puntos_167_y_188.csv")
+names(temps00s)[names(temps00s) == "temperatura(°C)"] <- "temperatura_C"
+mvd1 <- temps00s[temps00s$longitud == -56.25, ]
+mvd2 <- temps00s[temps00s$longitud == -56.0, ]
+# add mvd2$temperatura(°C) as a column temp_2 to mvd1
+mvd1 <- cbind(mvd1, temp_2 = mvd2$temperatura_C)
