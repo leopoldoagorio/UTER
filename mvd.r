@@ -67,4 +67,4 @@ names(temps00s)[names(temps00s) == "temperatura(°C)"] <- "temperatura_C"
 mvd1 <- temps00s[temps00s$longitud == -56.25, ]
 mvd2 <- temps00s[temps00s$longitud == -56.0, ]
 # add mvd2$temperatura(°C) as a column temp_2 to mvd1
-mvd1 <- cbind(mvd1, temp_2 = mvd2$temperatura_C)
+mvdboth <- cbind(mvd1, temp_2 = mvd2$temperatura_C)

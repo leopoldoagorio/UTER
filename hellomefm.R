@@ -31,7 +31,7 @@ summary(sa.model$a)
 summary(sa.model$hh[[33]]) 
 
 # Simulate future normalized half-hourly data
-simdemand <- simulate_ddemand(sa.model, sa, simyears=10)
+simdemand <- simulate_ddemand(sa.model, sa, simyears=200)
 
 # seasonal economic and weather forecast, to be given by user
 afcast <- data.frame(pop=1694, gsp=22573, resiprice=34.65, ddays=642)

@@ -18,7 +18,7 @@ I suggest strongly reading and going through the  [MEFM code first](https://gith
 - `dataset_2011a2021_puntos_167_y_188.csv`: Climate data only for Montevideo, years 2011 to 2021. You can download it using the `download_data.sh` script located in the root of this repository.
 - `PDA/Ricaldoni_v1.sqlite`: SQL dataset containing demand data. Cannot be uploaded to GitHub due to size constraints. You can download it using the `download_data.sh` script located in the root of this repository.
 
-## How to use
+## How to use (Linux)
 
 Clone the repository:
 ``` console
